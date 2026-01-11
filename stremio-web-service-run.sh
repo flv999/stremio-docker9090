@@ -28,7 +28,7 @@ fi
 
 start_http_server() {
     if [ -n "${WEBUI_INTERNAL_PORT}" ] && [ "${WEBUI_INTERNAL_PORT}" -ge 1 ] && [ "${WEBUI_INTERNAL_PORT}" -le 65535 ]; then
-        sed -i "s/8080/"${WEBUI_INTERNAL_PORT}"/g" /etc/nginx/http.d/default.conf
+        sed -i "s/9090/"${WEBUI_INTERNAL_PORT}"/g" /etc/nginx/http.d/default.conf
     fi
     nginx -g "daemon off;"
 }

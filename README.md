@@ -11,7 +11,7 @@ I built this to run Stremio on my Raspberry Pi 5 and couldn't find something tha
 ## Features
 
 - **All-in-One:** Bundles Stremio server, web player, and ffmpeg in a single container.
-- **Simple Networking:** Both the web player and server run on port 8080 behind nginx, so you only need to expose one port.
+- **Simple Networking:** Both the web player and server run on port 9090 behind nginx, so you only need to expose one port.
 - **Automatic Server Configuration:** Use `AUTO_SERVER_URL` or `SERVER_URL` to automatically configure the streaming server URL in the web player.
 - **HTTPS Out-of-the-Box:** Automatically generates and uses SSL certificates when an `IPADDRESS` is provided.
 - **Custom Certificates:** Supports using your own domain and SSL certificates.
@@ -56,12 +56,12 @@ docker run -d \
   -e NO_CORS=1 \
   -e AUTO_SERVER_URL=1 \
   -v ./stremio-data:/root/.stremio-server \
-  -p 8080:8080/tcp \
+  -p 9090:9090/tcp \
   --restart unless-stopped \
   tsaridas/stremio-docker:latest
 ```
 
-The Web UI will now be available on `http://<YOUR_SERVER_IP>:8080`. The streaming server will be auto-configured for you from the URL of the browser you are using to open it.
+The Web UI will now be available on `http://<YOUR_SERVER_IP>:9090`. The streaming server will be auto-configured for you from the URL of the browser you are using to open it.
 
 > 💡 Your configuration files and cache will be saved in `./stremio-data` on your host machine.
 
@@ -76,8 +76,8 @@ These options can be configured by setting environment variables using `-e KEY="
 | `AUTO_SERVER_URL`     | 0       | 1                            | When set to `1`, the streaming server URL is automatically detected from the browser's URL. This is the recommended setting for most users.                                                                    |
 | `NO_CORS`             | 1       | `0`                          | Set to enable server's cors. Default is disabled.                                                                                                                                                                                 |
 | `CASTING_DISABLED`    | -       | `1`                          | Set to disable casting. You should set this to `1` if you're getting SSDP errors in the logs                                                                                                                 |
-| `WEBUI_LOCATION`      | -       | `http://192.168.1.10:8080`   | Sets the redirect page for web player and automatically sets up streaming server for you when one tries to access server at port 11470 or 12470. Default is https://app.strem.io/shell-v4.4/                 |
-| `WEBUI_INTERNAL_PORT` | 8080    | `9090`                       | Sets the port inside the docker container for the web player                                                                                                                                                 |
+| `WEBUI_LOCATION`      | -       | `http://192.168.1.10:9090`   | Sets the redirect page for web player and automatically sets up streaming server for you when one tries to access server at port 11470 or 12470. Default is https://app.strem.io/shell-v4.4/                 |
+| `WEBUI_INTERNAL_PORT` | 9090    | `9090`                       | Sets the port inside the docker container for the web player                                                                                                                                                 |
 | `FFMPEG_BIN`          | -       | `/usr/bin/`                  | Set for custom ffmpeg bin path                                                                                                                                                                               |
 | `FFPROBE_BIN`         | -       | `/usr/bin/`                  | Set for custom ffprobe bin path                                                                                                                                                                              |
 | `APP_PATH`            | -       | `/srv/stremio-path/`         | Set for custom path for stremio server. Server will always save cache to /root/.stremio-server though so it's only for its config files.                                                                      |
@@ -106,24 +106,24 @@ docker run -d \
   --name=stremio-docker \
   -e NO_CORS=1 \
   -e AUTO_SERVER_URL=1 \
-  -p 8080:8080 \
+  -p 9090:9090 \
   tsaridas/stremio-docker:latest
 ```
-Access Stremio at `http://<YOUR_LAN_IP>:8080`.
+Access Stremio at `http://<YOUR_LAN_IP>:9090`.
 
 ### Scenario 2: HTTPS with Public IP
 
 This option automatically gets a certificate for a `*.stremio.rocks` subdomain and points it to your public IP address.
 
 - Set `IPADDRESS=0.0.0.0` to auto-detect your public IP.
-- Expose port `8080` and configure port forwarding on your router.
+- Expose port `9090` and configure port forwarding on your router.
 
 ```bash
 docker run -d \
   --name=stremio-docker \
   -e IPADDRESS=0.0.0.0 \
   -e AUTO_SERVER_URL=1 \
-  -p 8080:8080 \
+  -p 9090:9090 \
   tsaridas/stremio-docker:latest
 ```
 The container will generate a certificate and an A record for your public IP. To find the FQDN, look for a `.pem` file in your mounted volume (`~/.stremio-server`).
@@ -148,11 +148,11 @@ This is useful for accessing Stremio via HTTPS on your local network. It generat
       --name=stremio-docker \
       -e IPADDRESS=192.168.1.10 \
       -e AUTO_SERVER_URL=1 \
-      -p 8080:8080 \
+      -p 9090:9090 \
       -v ./stremio-data:/root/.stremio-server \
       tsaridas/stremio-docker:latest
     ```
-5.  Access Stremio at `https://192-168-1-10.519b6502d940.stremio.rocks:8080`.
+5.  Access Stremio at `https://192-168-1-10.519b6502d940.stremio.rocks:9090`.
 
 ### Scenario 4: HTTPS with Your Own Domain and Certificate
 
@@ -168,10 +168,10 @@ docker run -d \
   -e CERT_FILE=certificate.pem \
   -e AUTO_SERVER_URL=1 \
   -v ./stremio-data:/root/.stremio-server \
-  -p 8080:8080 \
+  -p 9090:9090 \
   tsaridas/stremio-docker:latest
 ```
-The WebPlayer will be available at `https://your.custom.domain:8080`.
+The WebPlayer will be available at `https://your.custom.domain:9090`.
 
 ## Updating
 
